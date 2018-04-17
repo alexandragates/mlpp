@@ -71,7 +71,7 @@ def make_zscore_df(dataframe):
 
 
 # calculate number of outliers in the row
-def calculate_outliers_per_row(zscore_df, score):
+def calculate_outliers_per_row(zscore_df, score, threshold):
 	'''
 	function to calculate the number of outliers in the row and put that sum in a column
 	inputs: zscore df made from make zscore df function and a predetermined z-score
@@ -88,7 +88,7 @@ def calculate_outliers_per_row(zscore_df, score):
 	rows_with_any_outliers = []
 	rows_with_many_outliers = []
 	for x in list(trans2):
-		if trans2[x]['num_outliers'] > 4: # if more than 33% of the entries in it are outliers, remove that row from the z-score table.
+		if trans2[x]['num_outliers'] > threshold: # if more than 33% of the entries in it are outliers, remove that row from the z-score table.
 			rows_with_many_outliers.append(x)
 			trans2 = trans2.drop([x], axis=1)
 		if trans2[x]['num_outliers'] > 0:
@@ -104,6 +104,9 @@ def find_nas(dataframe):
 	output: each column with a boolean True or False if have any nas
 	'''
 	return dataframe.isna().any()
+
+def cols_with_nas(series):
+	return series.index[series].tolist()
 
 
 
